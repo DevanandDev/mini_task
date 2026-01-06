@@ -1,4 +1,4 @@
-import 'package:cargo/provider/provider.dart';
+import 'package:cargo/provider/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

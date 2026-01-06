@@ -1,4 +1,5 @@
-import 'package:cargo/provider/provider.dart';
+import 'package:cargo/provider/auth_provider.dart';
+import 'package:cargo/provider/product_provider.dart';
 import 'package:cargo/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,9 @@ class MyLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<Myprovider>(context, listen: false);
+    final productProvider = Provider.of<Myprovider>(context, listen: false);
+    final authProvider = Provider.of<LoginProvider>(context, listen: false);
+    
     return Scaffold(
       appBar: AppBar(title: const Text('Login'), centerTitle: true),
       body: Padding(
@@ -22,6 +25,7 @@ class MyLogin extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextFormField(
+              controller: authProvider.emailController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
@@ -35,12 +39,14 @@ class MyLogin extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             TextFormField(
+              controller: authProvider.passwordController,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(25),
                   borderSide: BorderSide.none,
                 ),
-                hintText: 'Password',prefixIcon: Icon(Icons.key),
+                hintText: 'Password',
+                prefixIcon: Icon(Icons.key),
                 fillColor: const Color.fromARGB(255, 243, 238, 238),
                 filled: true,
               ),
@@ -56,12 +62,20 @@ class MyLogin extends StatelessWidget {
               child: Material(
                 color: Colors.transparent,
                 child: InkWell(
-                  onTap: ()async {
-                  await provider.getProducts();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (ctx) => MyHome()),
-                    );
+                  onTap: () async {
+                    // final success = await authProvider.loginProvider();
+                    // if (success) {
+                      await productProvider.getProducts();
+
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (_) => MyHome()),
+                      );
+                    // } else {
+                    //   ScaffoldMessenger.of(context).showSnackBar(
+                    //     SnackBar(content: Text('Login failed.try again')),
+                    //   );
+                    // }
                   },
                   borderRadius: BorderRadius.circular(25),
                   child: Center(
